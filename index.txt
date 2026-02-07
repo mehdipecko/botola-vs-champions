@@ -1,0 +1,913 @@
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botola vs Champions League | تحليل و مقارنة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.js"></script>
+    <style>
+        :root {
+            --morocco-red: #C1272D;
+            --morocco-green: #006233;
+            --champions-blue: #034694;
+            --champions-stars: #FFD700;
+            --dark-bg: #0A0E1A;
+            --card-bg: #131826;
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --accent-1: #FF3366;
+            --accent-2: #00D9FF;
+            --grid-color: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', 'Cairo', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(193, 39, 45, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 98, 51, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(3, 70, 148, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        header {
+            padding: 40px 0 60px;
+            border-bottom: 1px solid var(--grid-color);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, var(--morocco-red) 0%, var(--champions-blue) 50%, var(--morocco-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 8s ease infinite;
+            background-size: 200% 200%;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .subtitle {
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-top: 10px;
+            font-weight: 400;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--grid-color);
+            border-radius: 16px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--morocco-red), var(--morocco-green));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .stat-card.ucl::before {
+            background: linear-gradient(90deg, var(--champions-blue), var(--champions-stars));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-card.botola .stat-value {
+            color: var(--morocco-red);
+        }
+
+        .stat-card.ucl .stat-value {
+            color: var(--champions-blue);
+        }
+
+        .stat-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .comparison-section {
+            margin: 80px 0;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--morocco-red), transparent);
+        }
+
+        .chart-container {
+            background: var(--card-bg);
+            border: 1px solid var(--grid-color);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 400px;
+            margin-top: 20px;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .news-card {
+            background: var(--card-bg);
+            border: 1px solid var(--grid-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--morocco-green), var(--champions-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .news-content {
+            padding: 25px;
+        }
+
+        .news-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .news-category.botola {
+            background: rgba(193, 39, 45, 0.2);
+            color: var(--morocco-red);
+        }
+
+        .news-category.ucl {
+            background: rgba(3, 70, 148, 0.2);
+            color: var(--champions-blue);
+        }
+
+        .news-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .news-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .team-comparison {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: center;
+            margin: 40px 0;
+            padding: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--grid-color);
+            border-radius: 20px;
+        }
+
+        .team-side {
+            text-align: center;
+        }
+
+        .team-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            border: 3px solid;
+        }
+
+        .team-logo.botola {
+            background: linear-gradient(135deg, var(--morocco-red), var(--morocco-green));
+            border-color: var(--morocco-red);
+        }
+
+        .team-logo.ucl {
+            background: linear-gradient(135deg, var(--champions-blue), var(--champions-stars));
+            border-color: var(--champions-blue);
+        }
+
+        .team-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .team-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .team-stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 8px;
+        }
+
+        .vs-divider {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4rem;
+            color: var(--text-secondary);
+            opacity: 0.3;
+        }
+
+        footer {
+            margin-top: 100px;
+            padding: 40px 0;
+            border-top: 1px solid var(--grid-color);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .legend {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .team-comparison {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .vs-divider {
+                font-size: 2rem;
+                transform: rotate(90deg);
+            }
+
+            h1 {
+                font-size: 3rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        .loading-animation {
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+        .stat-card:nth-child(5) { animation-delay: 0.5s; }
+        .stat-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Portfolio Section Styles */
+        #about a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #about a[href^="mailto"]:hover {
+            box-shadow: 0 8px 30px rgba(193, 39, 45, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div>
+                    <h1>BOTOLA VS CHAMPIONS LEAGUE</h1>
+                    <p class="subtitle">مقارنة شاملة بين البطولة الاحترافية ودوري الأبطال</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card botola loading-animation">
+                <div class="stat-label">Botola Pro - معدل الأهداف</div>
+                <div class="stat-value">2.4</div>
+                <div class="stat-description">معدل الأهداف لكل مباراة في البطولة المغربية</div>
+            </div>
+
+            <div class="stat-card ucl loading-animation">
+                <div class="stat-label">Champions League - معدل الأهداف</div>
+                <div class="stat-value">3.1</div>
+                <div class="stat-description">معدل الأهداف لكل مباراة في دوري الأبطال</div>
+            </div>
+
+            <div class="stat-card botola loading-animation">
+                <div class="stat-label">Botola - عدد الفرق</div>
+                <div class="stat-value">16</div>
+                <div class="stat-description">الفرق المشاركة في البطولة الاحترافية</div>
+            </div>
+
+            <div class="stat-card ucl loading-animation">
+                <div class="stat-label">Champions League - عدد الفرق</div>
+                <div class="stat-value">32</div>
+                <div class="stat-description">الفرق المشاركة في دوري الأبطال الأوروبي</div>
+            </div>
+
+            <div class="stat-card botola loading-animation">
+                <div class="stat-label">Botola - القيمة السوقية</div>
+                <div class="stat-value">€45M</div>
+                <div class="stat-description">متوسط القيمة السوقية للفرق المغربية</div>
+            </div>
+
+            <div class="stat-card ucl loading-animation">
+                <div class="stat-label">Champions League - القيمة السوقية</div>
+                <div class="stat-value">€650M</div>
+                <div class="stat-description">متوسط القيمة السوقية للفرق الأوروبية</div>
+            </div>
+        </section>
+
+        <section class="comparison-section">
+            <h2 class="section-title">مقارنة الأداء التقني</h2>
+            
+            <div class="chart-container">
+                <h3 style="margin-bottom: 10px; font-size: 1.3rem;">الاستحواذ والتمريرات</h3>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: rgba(193, 39, 45, 0.8);"></div>
+                        <span>Botola Pro</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background: rgba(3, 70, 148, 0.8);"></div>
+                        <span>Champions League</span>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <canvas id="possessionChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 10px; font-size: 1.3rem;">الإحصائيات الهجومية</h3>
+                <div class="chart-wrapper">
+                    <canvas id="attackChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 10px; font-size: 1.3rem;">الإحصائيات الدفاعية</h3>
+                <div class="chart-wrapper">
+                    <canvas id="defenseChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="comparison-section">
+            <h2 class="section-title">مقارنة الفرق</h2>
+            
+            <div class="team-comparison">
+                <div class="team-side">
+                    <div class="team-logo botola">WYD</div>
+                    <div class="team-name">الوداد الرياضي</div>
+                    <div class="team-stats">
+                        <div class="team-stat-item">
+                            <span>القيمة السوقية</span>
+                            <strong>€18M</strong>
+                        </div>
+                        <div class="team-stat-item">
+                            <span>عدد اللاعبين</span>
+                            <strong>28</strong>
+                        </div>
+                        <div class="team-stat-item">
+                            <span>متوسط العمر</span>
+                            <strong>26.5</strong>
+                        </div>
+                        <div class="team-stat-item">
+                            <span>البطولات</span>
+                            <strong>22</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="vs-divider">VS</div>
+
+                <div class="team-side">
+                    <div class="team-logo ucl">RMA</div>
+                    <div class="team-name">ريال مدريد</div>
+                    <div class="team-stats">
+                        <div class="team-stat-item">
+                            <span>القيمة السوقية</span>
+                            <strong>€1.2B</strong>
+                        </div>
+                        <div class="team-stat-item">
+                            <span>عدد اللاعبين</span>
+                            <strong>26</strong>
+                        </div>
+                        <div class="team-stat-item">
+                            <span>متوسط العمر</span>
+                            <strong>25.8</strong>
+                        </div>
+                        <div class="team-stat-item">
+                            <span>دوري الأبطال</span>
+                            <strong>15</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="comparison-section">
+            <h2 class="section-title">آخر الأخبار</h2>
+            
+            <div class="news-grid">
+                <div class="news-card">
+                    <div class="news-image">⚽</div>
+                    <div class="news-content">
+                        <span class="news-category botola">Botola Pro</span>
+                        <h3 class="news-title">الوداد يواصل صدارة البطولة بعد فوز مثير</h3>
+                        <p class="news-excerpt">حقق الوداد الرياضي فوزاً مستحقاً على الرجاء في الديربي بنتيجة 2-1، ليواصل تصدره للبطولة الاحترافية بفارق 5 نقاط عن الملاحق.</p>
+                        <div class="news-meta">
+                            <span>📅 منذ ساعتين</span>
+                            <span class="pulse">🔴 LIVE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image">🏆</div>
+                    <div class="news-content">
+                        <span class="news-category ucl">Champions League</span>
+                        <h3 class="news-title">مانشستر سيتي يتأهل لربع النهائي</h3>
+                        <p class="news-excerpt">تأهل مانشستر سيتي إلى ربع نهائي دوري أبطال أوروبا بعد فوزه الكبير على لايبزيغ بنتيجة 7-0 في مجموع المباراتين.</p>
+                        <div class="news-meta">
+                            <span>📅 منذ 5 ساعات</span>
+                            <span>👁️ 15.2K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image">📊</div>
+                    <div class="news-content">
+                        <span class="news-category botola">Botola Pro</span>
+                        <h3 class="news-title">تحليل: مستوى البطولة في تحسن مستمر</h3>
+                        <p class="news-excerpt">تشير الإحصائيات الأخيرة إلى تحسن ملحوظ في مستوى الأداء التقني والتكتيكي في البطولة الاحترافية المغربية مقارنة بالموسم الماضي.</p>
+                        <div class="news-meta">
+                            <span>📅 اليوم</span>
+                            <span>👁️ 8.5K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image">⭐</div>
+                    <div class="news-content">
+                        <span class="news-category ucl">Champions League</span>
+                        <h3 class="news-title">هالاند يحطم الأرقام القياسية</h3>
+                        <p class="news-excerpt">سجل إيرلينج هالاند هدفه الـ45 في دوري الأبطال، محطماً الرقم القياسي لأسرع لاعب يصل لهذا الرقم في تاريخ المسابقة.</p>
+                        <div class="news-meta">
+                            <span>📅 أمس</span>
+                            <span>👁️ 42.1K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image">🎯</div>
+                    <div class="news-content">
+                        <span class="news-category botola">Botola Pro</span>
+                        <h3 class="news-title">الرجاء يجهز صفقة نارية</h3>
+                        <p class="news-excerpt">يسعى الرجاء الرياضي لإتمام صفقة مهاجم دولي خلال فترة الانتقالات القادمة لتعزيز صفوفه ومنافسة الوداد على اللقب.</p>
+                        <div class="news-meta">
+                            <span>📅 أمس</span>
+                            <span>👁️ 12.8K</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="news-card">
+                    <div class="news-image">🔥</div>
+                    <div class="news-content">
+                        <span class="news-category ucl">Champions League</span>
+                        <h3 class="news-title">قرعة ربع النهائي: مواجهات نارية</h3>
+                        <p class="news-excerpt">أسفرت قرعة دوري الأبطال عن مواجهات قوية في ربع النهائي، أبرزها مانشستر سيتي ضد بايرن ميونخ وريال مدريد أمام تشيلسي.</p>
+                        <div class="news-meta">
+                            <span>📅 منذ يومين</span>
+                            <span>👁️ 38.6K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="comparison-section" id="about">
+            <h2 class="section-title">عن المطور</h2>
+            
+            <div class="chart-container" style="text-align: center;">
+                <div style="max-width: 800px; margin: 0 auto;">
+                    <div style="width: 120px; height: 120px; margin: 0 auto 30px; border-radius: 50%; background: linear-gradient(135deg, var(--morocco-red), var(--morocco-green)); display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 3rem; border: 4px solid rgba(255,255,255,0.1);">
+                        EM
+                    </div>
+                    
+                    <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; margin-bottom: 15px; letter-spacing: 2px;">
+                        El Mehdi
+                    </h3>
+                    
+                    <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 30px; line-height: 1.8;">
+                        مطور ويب من المغرب، مهتم ببناء تطبيقات تفاعلية وتحليل البيانات الرياضية
+                    </p>
+                    
+                    <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;">
+                        <span style="padding: 8px 20px; background: rgba(193, 39, 45, 0.2); border-radius: 20px; font-size: 0.9rem; border: 1px solid rgba(193, 39, 45, 0.4);">HTML/CSS</span>
+                        <span style="padding: 8px 20px; background: rgba(0, 98, 51, 0.2); border-radius: 20px; font-size: 0.9rem; border: 1px solid rgba(0, 98, 51, 0.4);">JavaScript</span>
+                        <span style="padding: 8px 20px; background: rgba(3, 70, 148, 0.2); border-radius: 20px; font-size: 0.9rem; border: 1px solid rgba(3, 70, 148, 0.4);">Chart.js</span>
+                        <span style="padding: 8px 20px; background: rgba(255, 215, 0, 0.2); border-radius: 20px; font-size: 0.9rem; border: 1px solid rgba(255, 215, 0, 0.4);">Git/GitHub</span>
+                        <span style="padding: 8px 20px; background: rgba(0, 217, 255, 0.2); border-radius: 20px; font-size: 0.9rem; border: 1px solid rgba(0, 217, 255, 0.4);">React</span>
+                    </div>
+                    
+                    <div style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
+                        <a href="https://github.com/mehdipecko" target="_blank" rel="noopener noreferrer" style="padding: 15px 35px; background: var(--card-bg); border: 2px solid var(--grid-color); border-radius: 12px; color: var(--text-primary); text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                            </svg>
+                            GitHub
+                        </a>
+                        
+                        <a href="mailto:elmehdilamtoukar@gmail.com" style="padding: 15px 35px; background: linear-gradient(135deg, var(--morocco-red), var(--morocco-green)); border: none; border-radius: 12px; color: var(--text-primary); text-decoration: none; font-weight: 600; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(193, 39, 45, 0.3);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            Contact Me
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p style="font-size: 0.9rem; margin-bottom: 10px;">
+                مقارنة شاملة بين البطولة الاحترافية المغربية ودوري أبطال أوروبا
+            </p>
+            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 5px;">
+                تصميم وتطوير: El Mehdi | 2026
+            </p>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); opacity: 0.7;">
+                Built with HTML, CSS, JavaScript & Chart.js
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Chart.js configuration
+        Chart.defaults.color = '#A0AEC0';
+        Chart.defaults.font.family = "'Poppins', 'Cairo', sans-serif";
+        Chart.defaults.font.size = 13;
+
+        // Possession Chart
+        var possessionCtx = document.getElementById('possessionChart').getContext('2d');
+        new Chart(possessionCtx, {
+            type: 'bar',
+            data: {
+                labels: ['الاستحواذ %', 'دقة التمرير %', 'التمريرات الناجحة', 'التمريرات المفتاحية'],
+                datasets: [{
+                    label: 'Botola Pro',
+                    data: [52, 78, 412, 8.5],
+                    backgroundColor: 'rgba(193, 39, 45, 0.8)',
+                    borderColor: 'rgba(193, 39, 45, 1)',
+                    borderWidth: 2
+                }, {
+                    label: 'Champions League',
+                    data: [58, 85, 534, 12.3],
+                    backgroundColor: 'rgba(3, 70, 148, 0.8)',
+                    borderColor: 'rgba(3, 70, 148, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Attack Chart
+        var attackCtx = document.getElementById('attackChart').getContext('2d');
+        new Chart(attackCtx, {
+            type: 'radar',
+            data: {
+                labels: ['الأهداف', 'التسديدات', 'التسديدات على المرمى', 'الفرص الخطيرة', 'الهجمات المرتدة'],
+                datasets: [{
+                    label: 'Botola Pro',
+                    data: [2.4, 12.5, 4.8, 6.2, 3.1],
+                    backgroundColor: 'rgba(193, 39, 45, 0.2)',
+                    borderColor: 'rgba(193, 39, 45, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(193, 39, 45, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(193, 39, 45, 1)'
+                }, {
+                    label: 'Champions League',
+                    data: [3.1, 15.8, 6.4, 8.7, 4.2],
+                    backgroundColor: 'rgba(3, 70, 148, 0.2)',
+                    borderColor: 'rgba(3, 70, 148, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(3, 70, 148, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(3, 70, 148, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        },
+                        angleLines: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Defense Chart
+        var defenseCtx = document.getElementById('defenseChart').getContext('2d');
+        new Chart(defenseCtx, {
+            type: 'line',
+            data: {
+                labels: ['الجولة 1', 'الجولة 5', 'الجولة 10', 'الجولة 15', 'الجولة 20', 'الجولة 25'],
+                datasets: [{
+                    label: 'Botola - الأهداف المستقبلة',
+                    data: [1.2, 1.1, 0.9, 1.0, 0.8, 0.9],
+                    borderColor: 'rgba(193, 39, 45, 1)',
+                    backgroundColor: 'rgba(193, 39, 45, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }, {
+                    label: 'Champions League - الأهداف المستقبلة',
+                    data: [1.5, 1.3, 1.1, 1.2, 1.0, 1.1],
+                    borderColor: 'rgba(3, 70, 148, 1)',
+                    backgroundColor: 'rgba(3, 70, 148, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.05)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Animation on scroll
+        var observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.loading-animation').forEach(function(el) {
+            el.style.transform = 'translateY(30px)';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
