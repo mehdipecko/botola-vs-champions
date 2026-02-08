@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Botola vs Champions League | مقارنة شاملة بين البطولتين</title>
+    <meta name="description" content="مقارنة تفاعلية شاملة بين البطولة الاحترافية المغربية (بوطولا) ودوري أبطال أوروبا - إحصائيات، تحليلات، ورسوم بيانية مباشرة">
+    <meta name="keywords" content="بوطولا, دوري الأبطال, الوداد, الرجاء, ريال مدريد, Champions League, Botola Pro, مقارنة, كرة القدم">
+    <meta name="author" content="El Mehdi">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mehdipecko.github.io/botola-vs-champions/">
+    <meta property="og:title" content="Botola vs Champions League - مقارنة شاملة">
+    <meta property="og:description" content="تحليل تفاعلي يقارن بين البطولة المغربية ودوري الأبطال الأوروبي">
+    <meta property="og:image" content="https://mehdipecko.github.io/botola-vs-champions/assets/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mehdipecko.github.io/botola-vs-champions/">
+    <meta property="twitter:title" content="Botola vs Champions League">
+    <meta property="twitter:description" content="مقارنة شاملة بين البطولة المغربية ودوري الأبطال">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;600;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Loading Animation -->
+    <div id="loader" class="loader">
+        <div class="loader-ball"></div>
+        <p class="loader-text">جاري التحميل...</p>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="container">
+            <h1 class="hero-title">
+                <span class="title-botola">BOTOLA</span>
+                <span class="title-vs">VS</span>
+                <span class="title-champions">CHAMPIONS LEAGUE</span>
+            </h1>
+            <p class="hero-subtitle">مقارنة شاملة بين البطولة الاحترافية ودوري الأبطال</p>
+            <div class="hero-scroll">
+                <span>⬇</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quick Stats Section -->
+    <section class="quick-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card botola">
+                    <div class="stat-icon">⚽</div>
+                    <h3>Botola Pro - معدل الأهداف</h3>
+                    <div class="stat-number" data-target="2.4">0</div>
+                    <p>معدل الأهداف لكل مباراة في البطولة المغربية</p>
+                </div>
+                
+                <div class="stat-card champions">
+                    <div class="stat-icon">🏆</div>
+                    <h3>Champions League - معدل الأهداف</h3>
+                    <div class="stat-number" data-target="3.1">0</div>
+                    <p>معدل الأهداف لكل مباراة في دوري الأبطال</p>
+                </div>
+                
+                <div class="stat-card botola">
+                    <div class="stat-icon">👥</div>
+                    <h3>Botola - عدد الفرق</h3>
+                    <div class="stat-number" data-target="16">0</div>
+                    <p>الفرق المشاركة في البطولة الاحترافية</p>
+                </div>
+                
+                <div class="stat-card champions">
+                    <div class="stat-icon">🌍</div>
+                    <h3>Champions League - عدد الفرق</h3>
+                    <div class="stat-number" data-target="32">0</div>
+                    <p>الفرق المشاركة في دوري الأبطال الأوروبي</p>
+                </div>
+                
+                <div class="stat-card botola">
+                    <div class="stat-icon">💰</div>
+                    <h3>Botola - القيمة السوقية</h3>
+                    <div class="stat-number">€45M</div>
+                    <p>متوسط القيمة السوقية للفرق المغربية</p>
+                </div>
+                
+                <div class="stat-card champions">
+                    <div class="stat-icon">💎</div>
+                    <h3>Champions League - القيمة السوقية</h3>
+                    <div class="stat-number">€650M</div>
+                    <p>متوسط القيمة السوقية للفرق الأوروبية</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Comparison Section -->
+    <section class="technical-comparison">
+        <div class="container">
+            <h2 class="section-title">مقارنة الأداء التقني</h2>
+            
+            <div class="charts-grid">
+                <!-- Possession & Passes Chart -->
+                <div class="chart-container">
+                    <h3>الاستحواذ والتمريرات</h3>
+                    <canvas id="possessionChart"></canvas>
+                    <div class="chart-legend">
+                        <span class="legend-item botola">
+                            <span class="legend-color"></span>Botola Pro
+                        </span>
+                        <span class="legend-item champions">
+                            <span class="legend-color"></span>Champions League
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Attack Stats Chart -->
+                <div class="chart-container">
+                    <h3>الإحصائيات الهجومية</h3>
+                    <canvas id="attackChart"></canvas>
+                </div>
+                
+                <!-- Defense Stats Chart -->
+                <div class="chart-container">
+                    <h3>الإحصائيات الدفاعية</h3>
+                    <canvas id="defenseChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teams Comparison Section -->
+    <section class="teams-comparison">
+        <div class="container">
+            <h2 class="section-title">مقارنة الفرق</h2>
+            
+            <div class="teams-grid">
+                <div class="team-card wydad">
+                    <div class="team-badge">WYD</div>
+                    <h3>الوداد الرياضي</h3>
+                    <div class="team-stats">
+                        <div class="team-stat">
+                            <span>القيمة السوقية</span>
+                            <strong>€18M</strong>
+                        </div>
+                        <div class="team-stat">
+                            <span>عدد اللاعبين</span>
+                            <strong>28</strong>
+                        </div>
+                        <div class="team-stat">
+                            <span>متوسط العمر</span>
+                            <strong>26.5</strong>
+                        </div>
+                        <div class="team-stat">
+                            <span>البطولات</span>
+                            <strong>22</strong>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="vs-separator">
+                    <span>VS</span>
+                </div>
+                
+                <div class="team-card real-madrid">
+                    <div class="team-badge">RMA</div>
+                    <h3>ريال مدريد</h3>
+                    <div class="team-stats">
+                        <div class="team-stat">
+                            <span>القيمة السوقية</span>
+                            <strong>€1.2B</strong>
+                        </div>
+                        <div class="team-stat">
+                            <span>عدد اللاعبين</span>
+                            <strong>26</strong>
+                        </div>
+                        <div class="team-stat">
+                            <span>متوسط العمر</span>
+                            <strong>25.8</strong>
+                        </div>
+                        <div class="team-stat">
+                            <span>دوري الأبطال</span>
+                            <strong>15</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="news-section">
+        <div class="container">
+            <h2 class="section-title">آخر الأخبار</h2>
+            
+            <div class="news-grid">
+                <article class="news-card botola-news">
+                    <div class="news-badge">⚽ Botola Pro</div>
+                    <h3>الوداد يواصل صدارة البطولة بعد فوز مثير</h3>
+                    <p>حقق الوداد الرياضي فوزاً مستحقاً على الرجاء في الديربي بنتيجة 2-1، ليواصل تصدره للبطولة الاحترافية بفارق 5 نقاط عن الملاحق.</p>
+                    <div class="news-meta">
+                        <span class="news-time">📅 منذ ساعتين</span>
+                        <span class="news-live">🔴 LIVE</span>
+                    </div>
+                </article>
+                
+                <article class="news-card champions-news">
+                    <div class="news-badge">🏆 Champions League</div>
+                    <h3>مانشستر سيتي يتأهل لربع النهائي</h3>
+                    <p>تأهل مانشستر سيتي إلى ربع نهائي دوري أبطال أوروبا بعد فوزه الكبير على لايبزيغ بنتيجة 7-0 في مجموع المباراتين.</p>
+                    <div class="news-meta">
+                        <span class="news-time">📅 منذ 5 ساعات</span>
+                        <span class="news-views">👁️ 15.2K</span>
+                    </div>
+                </article>
+                
+                <article class="news-card botola-news">
+                    <div class="news-badge">📊 Botola Pro</div>
+                    <h3>تحليل: مستوى البطولة في تحسن مستمر</h3>
+                    <p>تشير الإحصائيات الأخيرة إلى تحسن ملحوظ في مستوى الأداء التقني والتكتيكي في البطولة الاحترافية المغربية مقارنة بالموسم الماضي.</p>
+                    <div class="news-meta">
+                        <span class="news-time">📅 اليوم</span>
+                        <span class="news-views">👁️ 8.5K</span>
+                    </div>
+                </article>
+                
+                <article class="news-card champions-news">
+                    <div class="news-badge">⭐ Champions League</div>
+                    <h3>هالاند يحطم الأرقام القياسية</h3>
+                    <p>سجل إيرلينج هالاند هدفه الـ45 في دوري الأبطال، محطماً الرقم القياسي لأسرع لاعب يصل لهذا الرقم في تاريخ المسابقة.</p>
+                    <div class="news-meta">
+                        <span class="news-time">📅 أمس</span>
+                        <span class="news-views">👁️ 42.1K</span>
+                    </div>
+                </article>
+                
+                <article class="news-card botola-news">
+                    <div class="news-badge">🎯 Botola Pro</div>
+                    <h3>الرجاء يجهز صفقة نارية</h3>
+                    <p>يسعى الرجاء الرياضي لإتمام صفقة مهاجم دولي خلال فترة الانتقالات القادمة لتعزيز صفوفه ومنافسة الوداد على اللقب.</p>
+                    <div class="news-meta">
+                        <span class="news-time">📅 أمس</span>
+                        <span class="news-views">👁️ 12.8K</span>
+                    </div>
+                </article>
+                
+                <article class="news-card champions-news">
+                    <div class="news-badge">🔥 Champions League</div>
+                    <h3>قرعة ربع النهائي: مواجهات نارية</h3>
+                    <p>أسفرت قرعة دوري الأبطال عن مواجهات قوية في ربع النهائي، أبرزها مانشستر سيتي ضد بايرن ميونخ وريال مدريد أمام تشيلسي.</p>
+                    <div class="news-meta">
+                        <span class="news-time">📅 منذ يومين</span>
+                        <span class="news-views">👁️ 38.6K</span>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>مقارنة شاملة بين البطولة الاحترافية المغربية ودوري أبطال أوروبا</p>
+            <p class="footer-credits">
+                البيانات محدثة حتى فبراير 2026 | 
+                تصميم وتطوير بواسطة 
+                <a href="https://github.com/mehdipecko" target="_blank" rel="noopener">El Mehdi</a>
+            </p>
+            <div class="footer-links">
+                <a href="mailto:elmehdilamtoukar@gmail.com">📧 تواصل معنا</a>
+                <a href="https://github.com/mehdipecko/botola-vs-champions" target="_blank" rel="noopener">💻 GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- External JavaScript -->
+    <script src="js/charts.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
