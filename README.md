@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Botola vs Champions</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+    font-family: sans-serif;
+    background: linear-gradient(130deg,#050b18,#101a2d);
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+.hero {
+    text-align: center;
+    padding: 40px 0;
+}
+.stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px;
+}
+.card {
+    background: rgba(255,255,255,0.06);
+    border-radius: 15px;
+    padding: 15px;
+    width: 200px;
+    text-align: center;
+    backdrop-filter: blur(6px);
+    transition: transform 0.3s, background 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+    background: rgba(255,255,255,0.12);
+}
+.card img {
+    width: 80px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    border: 2px solid #fff2;
+}
+.number.red { color: #ff5757; font-size: 36px; font-weight: bold; }
+.number.blue { color: #4fa3ff; font-size: 36px; font-weight: bold; }
+.charts {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.gallery {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+    gap: 15px;
+}
+.gallery img {
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s;
+}
+.gallery img:hover {
+    transform: scale(1.05);
+}
+.footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px 0;
+    color: #8895a5;
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <h1>BOTOLA VS CHAMPIONS LEAGUE</h1>
+</header>
+
+<section class="stats">
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/42/Wydad_AC_Logo.svg/120px-Wydad_AC_Logo.svg.png" alt="Botola Team">
+    <h3>Botola – Goals</h3>
+    <p class="number red">2.4</p>
+  </div>
+  <div class="card">
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/08/Real_Madrid_CF.svg/120px-Real_Madrid_CF.svg.png" alt="Champions Team">
+    <h3>Champions – Goals</h3>
+    <p class="number blue">3.1</p>
+  </div>
+</section>
+
+<section class="charts">
+  <canvas id="pieChart"></canvas>
+  <canvas id="lineChart"></canvas>
+</section>
+
+<section class="gallery">
+  <img src="https://upload.wikimedia.org/wikipedia/en/2/2f/MC_Alger_logo.png" alt="Team 1">
+  <img src="https://upload.wikimedia.org/wikipedia/en/5/5f/FC_Barcelona_logo.png" alt="Team 2">
+  <img src="https://upload.wikimedia.org/wikipedia/en/0/08/Real_Madrid_CF.svg" alt="Team 3">
+  <img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/42/Wydad_AC_Logo.svg/120px-Wydad_AC_Logo.svg.png" alt="Team 4">
+</section>
+
+<footer class="footer">
+  <p>© 2026 – Botola vs Champions | تطوير: mehdipecko</p>
+</footer>
+
+<script>
+// Pie Chart
+const pieCtx = document.getElementById('pieChart').getContext('2d');
+const pieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+        labels: ['Botola', 'Champions'],
+        datasets: [{
+            data: [2.4, 3.1],
+            backgroundColor: ['#ff5757', '#4fa3ff']
+        }]
+    },
+    options: { responsive: true }
+});
+
+// Line Chart
+const lineCtx = document.getElementById('lineChart').getContext('2d');
+const lineChart = new Chart(lineCtx, {
+    type: 'line',
+    data: {
+        labels: ['Match 1','Match 2','Match 3','Match 4','Match 5'],
+        datasets: [
+            {
+                label: 'Botola',
+                data: [1,2,3,2,2.4],
+                borderColor: '#ff5757',
+                tension: 0.4,
+                fill: false
+            },
+            {
+                label: 'Champions',
+                data: [2,2.5,3,3.2,3.1],
+                borderColor: '#4fa3ff',
+                tension: 0.4,
+                fill: false
+            }
+        ]
+    },
+    options: { responsive: true }
+});
+</script>
+
+</body>
+</html>
